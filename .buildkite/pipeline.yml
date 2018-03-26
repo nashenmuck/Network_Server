@@ -1,0 +1,3 @@
+steps:
+  - command: "docker build -t nashenmuck/network:armhf --no-cache ."
+  - command: "docker push nashenmuck/network:armhf"

@@ -1,0 +1,13 @@
+sudo: required
+
+language: generic
+
+services:
+  - docker
+script:
+  - docker build -t nashenmuck/network .
+deploy:
+  provider: script
+  script: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD && docker push nashenmuck/network
+  on:
+    branch: master 
