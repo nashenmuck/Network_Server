@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: ConfigMap
+metadata: 
+  name: network-config
+data:
+  PORT: "8080"
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata: 
+  name: network
+  labels: 
+    app: network
+spec: 
+  selector: 
+    matchLabels: 
+      app: network
+  template: 
+    metadata: 
+      labels: 
+        app: network
+    spec: 
+      containers: 
+      - name: network
+        image: nashenmuck/network
+        ports: 
+        -  containerPort: 8080
+           protocol: TCP
+        env:
+          - name: PORT
+            valueFrom:
+              configMapKeyRef:
+                name: network-config
+                key: PORT
+        resources:
+          requests:
+            cpu: "200m"
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: network
+spec:
+  rules:
+  - host: network.k8s.dvdmuckle.xyz
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: network
+          servicePort: 8080
+---
+kind: Service
+apiVersion: v1
+metadata: 
+  name: network
+spec: 
+  selector: 
+    app: network
+  ports: 
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
