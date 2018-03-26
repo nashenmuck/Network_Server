@@ -13,10 +13,14 @@ func dummyrequest(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	fmt.Printf("Serving on port %s\n", os.Getenv("PORT"))
+	port := "8080"
+	if os.Getenv("PORT") != "" {
+		port = os.Getenv("PORT")
+	}
+	fmt.Printf("Serving on port %s\n", port)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		dummyrequest(w, r)
 	})
-	log.Fatal(http.ListenAndServe(":"+(os.Getenv("PORT")),
+	log.Fatal(http.ListenAndServe(":"+port,
 		handlers.LoggingHandler(os.Stdout, http.DefaultServeMux)))
 }
