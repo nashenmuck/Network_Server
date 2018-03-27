@@ -40,6 +40,8 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: network
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   rules:
   - host: network.k8s.dvdmuckle.xyz
