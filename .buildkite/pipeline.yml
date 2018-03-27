@@ -2,5 +2,5 @@ steps:
   - command: "docker pull golang:latest && docker pull ubuntu:xenial"
   - command: "docker build -t nashenmuck/network:armhf -t nashenmuck/network:armhf-$(echo $BUILDKITE_COMMIT | cut -c1-7) --no-cache ."
   - command: "docker push nashenmuck/network:armhf && docker push nashenmuck/network:armhf-$(echo $BUILDKITE_COMMIT | cut -c1-7)"
-  - command: "kubectl set image -n nsm deployment/network network=nashenmuck/network:armhf-$(echo $BUILDKITE_COMMIT | cut -c1-7)"
+  - command: "helm upgrade --reuse-values --set image.tag=armhf-$(echo $BUILDKITE_COMMIT | cut -c1-7) network network/"
 
