@@ -54,7 +54,6 @@ func config() Config {
 func dbConfig(dbconfig Config) *sql.DB {
 	log.Println("Connecting to database...")
 	dbconnect := fmt.Sprintf("user=%s password=%s host=%s port=%s sslmode=disable", dbconfig.User, dbconfig.Pass, dbconfig.Host, dbconfig.DbPort)
-	fmt.Printf("Ready to connect, db config is %s\n", dbconnect)
 	db, err := sql.Open("postgres", dbconnect)
 	if err != nil {
 		log.Println(err)
@@ -71,6 +70,7 @@ func dbConfig(dbconfig Config) *sql.DB {
 	if dbError != nil {
 		log.Fatal(dbError)
 	}
+	defer log.Println("Connected to database!")
 	return db
 }
 func main() {
