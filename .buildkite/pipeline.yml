@@ -2,11 +2,11 @@ steps:
   - label: "🔨 Build"
     command:
       -  "docker pull golang:latest && docker pull ubuntu:xenial"
-      -  "docker build -t nashenmuck/network:armhf -t nashenmuck/network:armhf-$(echo $BUILDKITE_COMMIT | cut -c1-7) --no-cache ."
+      -  "docker build -t nashenmuck/network:armhf-testing -t nashenmuck/network:armhf-testing-$(echo $BUILDKITE_COMMIT | cut -c1-7) --no-cache ."
   - wait
   - label: "Deploy"
-    branches: "master"
+    branches: "testing"
     command:
-      - "docker push nashenmuck/network:armhf && docker push nashenmuck/network:armhf-$(echo $BUILDKITE_COMMIT | cut -c1-7)"
-      - "helm upgrade --reuse-values --set image.tag=armhf-$(echo $BUILDKITE_COMMIT | cut -c1-7) network network/"
+      - "docker push nashenmuck/network:armhf-testing && docker push nashenmuck/network:armhf-testing-$(echo $BUILDKITE_COMMIT | cut -c1-7)"
+      - "helm upgrade --reuse-values --set image.tag=armhf-testing-$(echo $BUILDKITE_COMMIT | cut -c1-7) network-test network/"
 
