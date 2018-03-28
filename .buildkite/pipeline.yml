@@ -3,6 +3,7 @@ steps:
     command:
       -  "docker pull golang:latest && docker pull ubuntu:xenial"
       -  "docker build -t nashenmuck/network:armhf -t nashenmuck/network:armhf-$(echo $BUILDKITE_COMMIT | cut -c1-7) --no-cache ."
+  - wait
   - label: "Deploy"
     branches: "master"
     command:
