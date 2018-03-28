@@ -4,8 +4,14 @@ language: generic
 
 services:
   - docker
+before_script: ./.deploy_helper.sh
 script:
-  - docker build -t nashenmuck/network:testing -t nashenmuck/network:testing-$(echo $TRAVIS_COMMIT | cut -c1-7) .
+  - docker build -t nashenmuck/network:$TAG -t nashenmuck/network:$TAG-$(echo $TRAVIS_COMMIT | cut -c1-7) .
+deploy:
+  provider: script
+  script: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD && docker push nashenmuck/network:latest && docker push nashenmuck/network:$(echo $TRAVIS_COMMIT | cut -c1-7)
+  on:
+    branch: master 
 deploy:
   provider: script
   script: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD && docker push nashenmuck/network:testing && docker push nashenmuck/network:testing-$(echo $TRAVIS_COMMIT | cut -c1-7)
