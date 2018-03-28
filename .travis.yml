@@ -5,9 +5,9 @@ language: generic
 services:
   - docker
 script:
-  - docker build -t nashenmuck/network:latest -t nashenmuck/network:$(echo $TRAVIS_COMMIT | cut -c1-7) .
+  - docker build -t nashenmuck/network:testing -t nashenmuck/network:testing-$(echo $TRAVIS_COMMIT | cut -c1-7) .
 deploy:
   provider: script
-  script: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD && docker push nashenmuck/network && docker push nashenmuck/network:$(echo $TRAVIS_COMMIT | cut -c1-7)
+  script: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD && docker push nashenmuck/network:testing && docker push nashenmuck/network:testing-$(echo $TRAVIS_COMMIT | cut -c1-7)
   on:
-    branch: master 
+    branch: testing
