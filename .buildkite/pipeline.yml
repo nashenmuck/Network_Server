@@ -9,7 +9,7 @@ steps:
     branches: "master"
     command:
       - "docker push nashenmuck/network:armhf && docker push nashenmuck/network:armhf-$(echo $BUILDKITE_COMMIT | cut -c1-7)"
-      - "helm upgrade --reuse-values --set image.tag=armhf-$(echo $BUILDKITE_COMMIT | cut -c1-7) network network/"
+      - "helm upgrade --reuse-values --set image.tag=armhf-$(echo $BUILDKITE_COMMIT | cut -c1-7) network chart/network/"
 
   - label: "🔨 Build"
     branches: "testing"
@@ -21,4 +21,4 @@ steps:
     branches: "testing"
     command:
       - "docker push nashenmuck/network:armhf-testing && docker push nashenmuck/network:armhf-testing-$(echo $BUILDKITE_COMMIT | cut -c1-7)"
-      - "helm upgrade --reuse-values  --set image.tag=armhf-testing-$(echo $BUILDKITE_COMMIT | cut -c1-7) network-testing network/"
+      - "helm upgrade --reuse-values  --set image.tag=armhf-testing-$(echo $BUILDKITE_COMMIT | cut -c1-7) network-testing chart/network/"
