@@ -20,7 +20,8 @@ type Config struct {
 	Database string
 }
 
-func dummyrequest(w http.ResponseWriter, r *http.Request) {
+func dummyrequest(w http.ResponseWriter, r *http.Request, db *sql.DB) {
+	db.Ping()
 	fmt.Fprintln(w, "We're up!")
 }
 
@@ -75,10 +76,10 @@ func dbConfig(dbconfig Config) *sql.DB {
 }
 func main() {
 	config := config()
-	_ = dbConfig(config)
+	db := dbConfig(config)
 	log.Printf("Serving on port %s\n", config.SvcPort)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		dummyrequest(w, r)
+		dummyrequest(w, r, db)
 	})
 	log.Fatal(http.ListenAndServe(":"+config.SvcPort,
 		handlers.LoggingHandler(os.Stdout, http.DefaultServeMux)))
