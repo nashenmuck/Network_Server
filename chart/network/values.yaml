@@ -13,6 +13,9 @@ service:
   type: ClusterIP
   port: 8080
 
+adminUser: admin
+adminPassword: password
+
 ingress:
   enabled: false
   annotations: {}
