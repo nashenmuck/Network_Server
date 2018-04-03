@@ -105,9 +105,9 @@ func dbmigrate(db *sql.DB) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = m.Force(1)
+	err = m.Migrate(1)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 	log.Println("Migration complete!")
 }
