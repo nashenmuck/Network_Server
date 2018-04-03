@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"github.com/gorilla/handlers"
 	_ "github.com/lib/pq"
+	"github.com/mattes/migrate"
+	"github.com/mattes/migrate/database/postgres"
+	_ "github.com/mattes/migrate/source/file"
 	"log"
 	"net/http"
 	"os"
@@ -18,6 +21,8 @@ type Config struct {
 	User     string
 	Pass     string
 	Database string
+	NetAdmin string
+	NetPass  string
 }
 
 func dummyrequest(w http.ResponseWriter, r *http.Request, db *sql.DB) {
@@ -42,7 +47,18 @@ func config() Config {
 		log.Fatal("Database user not set!")
 	}
 	if os.Getenv("POSTGRES_PASS") == "" {
-		log.Printf("Database password not set, assuming empty\n")
+		log.Println("Database password not set, assuming empty")
+	}
+	admin, password := "admin", "password"
+	if os.Getenv("NETWORK_ADMIN") != "" {
+		admin = os.Getenv("NETWORK_ADMIN")
+	} else {
+		log.Printf("Network admin username not set, using \"%s\"\n", admin)
+	}
+	if os.Getenv("NETWORK_PASSWORD") != "" {
+		password = os.Getenv("NETWORK_PASSWORD")
+	} else {
+		log.Printf("Network admin password not set, using \"%s\"\n", password)
 	}
 	return Config{
 		SvcPort:  port,
@@ -50,7 +66,9 @@ func config() Config {
 		DbPort:   os.Getenv("POSTGRES_PORT"),
 		User:     os.Getenv("POSTGRES_USER"),
 		Pass:     os.Getenv("POSTGRES_PASS"),
-		Database: "network"}
+		Database: "network",
+		NetAdmin: admin,
+		NetPass:  password}
 }
 func dbConfig(dbconfig Config) *sql.DB {
 	log.Println("Connecting to database...")
@@ -74,9 +92,30 @@ func dbConfig(dbconfig Config) *sql.DB {
 	defer log.Println("Connected to database!")
 	return db
 }
+
+func dbmigrate(db *sql.DB) {
+	log.Println("Migrating SQL definitions...")
+	driver, err := postgres.WithInstance(db, &postgres.Config{})
+	if err != nil {
+		log.Fatal(err)
+	}
+	m, err := migrate.NewWithDatabaseInstance(
+		"file://sql/",
+		"postgres", driver)
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = m.Force(1)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println("Migration complete!")
+}
+
 func main() {
 	config := config()
 	db := dbConfig(config)
+	dbmigrate(db)
 	log.Printf("Serving on port %s\n", config.SvcPort)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		dummyrequest(w, r, db)
