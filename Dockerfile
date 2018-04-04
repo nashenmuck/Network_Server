@@ -1,7 +1,9 @@
-FROM golang as builder
+FROM golang:alpine as builder
 COPY . /go/src/github.com/nashenmuck/network_server
+RUN apk add --no-cache git
 RUN go get github.com/nashenmuck/network_server
-FROM ubuntu:xenial
+FROM alpine
+RUN apk add --no-cache ca-certificates
 COPY --from=builder /go/bin/network_server /root/
 COPY sql /root/sql
 WORKDIR /root
