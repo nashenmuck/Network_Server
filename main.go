@@ -32,19 +32,34 @@ func dummyrequest(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 
 func config() Config {
 	port := "8080"
+	pghost := "localhost"
+	pgport := "5432"
+	pguser := "postgres"
+	pgdb := "postgres"
 	if os.Getenv("PORT") != "" {
 		port = os.Getenv("PORT")
 	} else {
 		log.Println("Service port not found, using default 8080")
 	}
-	if os.Getenv("POSTGRES_HOST") == "" {
-		log.Fatal("Database host not set!")
+	if os.Getenv("POSTGRES_HOST") != "" {
+		pghost = os.Getenv("POSTGRES_HOST")
+	} else {
+		log.Printf("Database host not set, using default %s\n", pghost)
 	}
-	if os.Getenv("POSTGRES_PORT") == "" {
-		log.Fatal("Database port not set!")
+	if os.Getenv("POSTGRES_PORT") != "" {
+		pgport = os.Getenv("POSTGRES_PORT")
+	} else {
+		log.Printf("Database port not set, using default %s\n", pgport)
 	}
-	if os.Getenv("POSTGRES_USER") == "" {
-		log.Fatal("Database user not set!")
+	if os.Getenv("POSTGRES_USER") != "" {
+		pguser = os.Getenv("POSTGRES_USER")
+	} else {
+		log.Printf("Database user not set, using default %s\n", pguser)
+	}
+	if os.Getenv("POSTGRES_DATABASE") != "" {
+		pguser = os.Getenv("POSTGRES_DATABASE")
+	} else {
+		log.Printf("Database db not set, using default %s\n", pgdb)
 	}
 	if os.Getenv("POSTGRES_PASS") == "" {
 		log.Println("Database password not set, assuming empty")
@@ -62,11 +77,11 @@ func config() Config {
 	}
 	return Config{
 		SvcPort:  port,
-		Host:     os.Getenv("POSTGRES_HOST"),
-		DbPort:   os.Getenv("POSTGRES_PORT"),
-		User:     os.Getenv("POSTGRES_USER"),
+		Host:     pghost,
+		DbPort:   pgport,
+		User:     pguser,
 		Pass:     os.Getenv("POSTGRES_PASS"),
-		Database: "network",
+		Database: pgdb,
 		NetAdmin: admin,
 		NetPass:  password}
 }
