@@ -3,7 +3,7 @@ steps:
     branches: "master"
     command:
       -  "docker pull golang:alpine && docker pull alpine"
-      -  "docker build -t nashenmuck/network:armhf -t nashenmuck/network:armhf-$(echo $BUILDKITE_COMMIT | cut -c1-7) --no-cache ."
+      -  "docker build -t nashenmuck/network:armhf -t nashenmuck/network:armhf-$(echo $BUILDKITE_COMMIT | cut -c1-7)  ."
   - wait
   - label: "Deploy"
     branches: "master"
@@ -15,7 +15,7 @@ steps:
     branches: "testing"
     command:
       -  "docker pull golang:alpine && docker pull alpine"
-      -  "docker build -t nashenmuck/network:armhf-testing -t nashenmuck/network:armhf-testing-$(echo $BUILDKITE_COMMIT | cut -c1-7) --no-cache ."
+      -  "docker build -t nashenmuck/network:armhf-testing -t nashenmuck/network:armhf-testing-$(echo $BUILDKITE_COMMIT | cut -c1-7)  ."
   - wait
   - label: "Deploy"
     branches: "testing"
