@@ -29,9 +29,11 @@ spec:
             - name: POSTGRES_HOST
               value: "{{ .Release.Name }}-postgresql"
             - name: POSTGRES_PORT
-              value: "5432"
+              value: "{{ .Values.postgresql.service.port }}"
             - name: POSTGRES_USER
-              value: "postgres"
+              value: "{{ .Values.postgresql.postgresUser }}"
+            - name: POSTGRES_DATABASE
+              value: "{{ .Values.postgresql.postgresDatabase }}"
             - name: POSTGRES_PASS
               valueFrom:
                 secretKeyRef:
