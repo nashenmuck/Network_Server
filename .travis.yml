@@ -8,11 +8,11 @@ script:
   - docker build -t nashenmuck/network:$TRAVIS_BRANCH -t nashenmuck/network:$TRAVIS_BRANCH-$(echo $TRAVIS_COMMIT | cut -c1-7) .
 deploy:
   provider: script
-  script: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD && docker tag nashenmuck/network:$TRAVIS_BRANCH nashenmuck/network:latest && docker tag nashenmuck/network nashenmuck/network:latest-$(echo $TRAVIS_COMMIT | cut -c1-7) && docker push nashenmuck/network:latest && docker push nashenmuck/network:latest-$(echo $TRAVIS_COMMIT | cut -c1-7)
+  script: bash ci/deploy_master.sh
   on:
     branch: master 
 deploy:
   provider: script
-  script: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD && docker push nashenmuck/network:testing && docker push nashenmuck/network:testing-$(echo $TRAVIS_COMMIT | cut -c1-7)
+  script: bash ci/deploy_testing.sh
   on:
     branch: testing
