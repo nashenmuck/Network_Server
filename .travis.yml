@@ -8,11 +8,6 @@ script:
   - docker build -t nashenmuck/network:$TRAVIS_BRANCH -t nashenmuck/network:$TRAVIS_BRANCH-$(echo $TRAVIS_COMMIT | cut -c1-7) .
 deploy:
   provider: script
-  script: bash ci/deploy_master.sh
+  script: bash ci/deploy.sh
   on:
-    branch: master 
-deploy:
-  provider: script
-  script: bash ci/deploy_testing.sh
-  on:
-    branch: testing
+    all_branches: true
