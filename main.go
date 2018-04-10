@@ -88,6 +88,9 @@ func config() Config {
 func dbConfig(dbconfig Config) *sql.DB {
 	log.Println("Connecting to database...")
 	dbconnect := fmt.Sprintf("user=%s password=%s host=%s port=%s sslmode=disable dbname=%s", dbconfig.User, dbconfig.Pass, dbconfig.Host, dbconfig.DbPort, dbconfig.Database)
+	if os.Getenv("POSTGRES_PASS") == "" {
+		dbconnect = fmt.Sprintf("user=%s host=%s port=%s sslmode=disable dbname=%s", dbconfig.User, dbconfig.Host, dbconfig.DbPort, dbconfig.Database)
+	}
 	db, err := sql.Open("postgres", dbconnect)
 	if err != nil {
 		log.Println(err)
