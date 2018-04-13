@@ -123,7 +123,7 @@ func dbmigrate(db *sql.DB) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = m.Up()
+	err = m.Migrate(2)
 	if err != nil {
 		log.Println(err)
 	}
