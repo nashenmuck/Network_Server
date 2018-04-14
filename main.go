@@ -3,11 +3,11 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"github.com/golang-migrate/migrate"
+	"github.com/golang-migrate/migrate/database/postgres"
+	_ "github.com/golang-migrate/migrate/source/file"
 	"github.com/gorilla/handlers"
 	_ "github.com/lib/pq"
-	"github.com/mattes/migrate"
-	"github.com/mattes/migrate/database/postgres"
-	_ "github.com/mattes/migrate/source/file"
 	"log"
 	"net/http"
 	"os"
@@ -118,12 +118,12 @@ func dbmigrate(db *sql.DB) {
 		log.Fatal(err)
 	}
 	m, err := migrate.NewWithDatabaseInstance(
-		"file://sql/",
+		"file://sql",
 		"postgres", driver)
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = m.Migrate(2)
+	err = m.Steps(2)
 	if err != nil {
 		log.Println(err)
 	}
