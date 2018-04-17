@@ -13,9 +13,11 @@ CREATE TABLE IF NOT EXISTS users (
 	canonical_server varchar NOT NULL REFERENCES servers(server)
 );
 CREATE TABLE IF NOT EXISTS groups (
-	group_id int PRIMARY KEY,
+	group_id int NOT NULL,
 	owner varchar(32) NOT NULL REFERENCES users(username),
-	PRIMARY KEY (group_id, owner)
+	group_name varchar(32) NOT NULL,
+	PRIMARY KEY (group_id, owner),
+	UNIQUE (owner,group_name)
 );
 CREATE TABLE IF NOT EXISTS followers (
 	followeeId varchar(32) NOT NULL REFERENCES users(username),
