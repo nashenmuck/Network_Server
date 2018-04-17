@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS followers (
 	followedwhen timestamp NOT NULL
 );
 CREATE TABLE IF NOT EXISTS group_followers (
-	group_id NOT NULL REFERENCES groups(group_id),
+	group_id int NOT NULL REFERENCES groups(group_id),
 	follower varchar(32) NOT NULL REFERENCES user(username),
 	follower_server varchar references servers(server),
 	UNIQUE (group_id, follower)
