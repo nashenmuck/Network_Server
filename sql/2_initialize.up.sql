@@ -47,3 +47,8 @@ CREATE TABLE IF NOT EXISTS regtokens (
 	issuer varchar(32) NOT NULL REFERENCES users(username),
 	token bytea NOT NULL UNIQUE
 );
+CREATE TABLE IF NOT EXISTS audit (
+	data timestamp NOT NULL,
+	event_type varchar,
+	event_message varchar
+);
