@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS users (
 	canonical_server varchar NOT NULL REFERENCES servers(server)
 );
 CREATE TABLE IF NOT EXISTS groups (
-	group_id int NOT NULL,
+	group_id int NOT NULL UNIQUE,
 	owner varchar(32) NOT NULL REFERENCES users(username),
 	group_name varchar(32) NOT NULL,
 	PRIMARY KEY (group_id, owner),
