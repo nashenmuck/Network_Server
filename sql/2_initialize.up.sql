@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS followers (
 	followee_server varchar NOT NULL REFERENCES servers(server),
 	followerId varchar(32) NOT NULL REFERENCES users(username), 
 	follower_server varchar NOT NULL REFERENCES servers(server),
-	followedwhen timestamp NOT NULL
+	followedwhen timestamp NOT NULL DEFAULT NOW()
 );
 CREATE TABLE IF NOT EXISTS group_followers (
 	group_id int NOT NULL REFERENCES groups(group_id),
@@ -37,7 +37,8 @@ CREATE TABLE IF NOT EXISTS posts (
 	body text NOT NULL,
 	groupid int NOT NULL REFERENCES groups(group_id),
 	is_special_group boolean NOT NULL,
-	origin_server varchar NOT NULL REFERENCES servers(server)
+	origin_server varchar NOT NULL REFERENCES servers(server),
+	date timestamp NOT NULL DEFAULT NOW()
 );
 CREATE TABLE IF NOT EXISTS authtokens (
 	username varchar(32) NOT NULL REFERENCES users(username), 
@@ -52,5 +53,7 @@ CREATE TABLE IF NOT EXISTS audit (
 	event_type varchar,
 	event_message varchar
 );
-CREATE INDEX IF NOT EXISTS user_index ON users (username);
-CREATE INDEX IF NOT EXISTS groups_index ON groups (group_id,owner);
+CREATE INDEX user_index ON users (username);
+CREATE INDEX groups_index ON groups (group_id,owner);
+CREATE INDEX posts_user_index ON posts (username);
+CREATE INDEX posts_time_index ON posts (date);
