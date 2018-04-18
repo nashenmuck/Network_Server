@@ -52,3 +52,5 @@ CREATE TABLE IF NOT EXISTS audit (
 	event_type varchar,
 	event_message varchar
 );
+CREATE INDEX IF NOT EXISTS user_index ON users (username);
+CREATE INDEX IF NOT EXISTS groups_index ON groups (group_id,owner);
