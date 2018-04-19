@@ -57,7 +57,7 @@ func config() Config {
 		log.Printf("Database user not set, using default %s\n", pguser)
 	}
 	if os.Getenv("POSTGRES_DATABASE") != "" {
-		pguser = os.Getenv("POSTGRES_DATABASE")
+		pgdb = os.Getenv("POSTGRES_DATABASE")
 	} else {
 		log.Printf("Database db not set, using default %s\n", pgdb)
 	}
@@ -123,7 +123,7 @@ func dbmigrate(db *sql.DB) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = m.Steps(2)
+	err = m.Migrate(2)
 	if err != nil {
 		log.Println(err)
 	}
