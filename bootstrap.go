@@ -69,7 +69,7 @@ func dbStringConfig() Config {
 	if os.Getenv("NETWORK_SERVERNAME") != "" {
 		servername = os.Getenv("NETWORK_SERVERNAME")
 	} else {
-		servername = "network" + servername
+		servername = "network-" + servername
 		log.Printf("Servername not set, using %s", servername)
 	}
 	admin, password := "admin", "password"
