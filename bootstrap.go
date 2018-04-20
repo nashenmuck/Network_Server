@@ -61,7 +61,11 @@ func dbStringConfig() Config {
 	if os.Getenv("POSTGRES_PASS") == "" {
 		log.Println("Database password not set, assuming empty")
 	}
-	servername := uuid.NewV4().String()
+	uuid, err := uuid.NewV4()
+	if err != nil {
+		log.Fatal(err)
+	}
+	servername := uuid.String()
 	if os.Getenv("NETWORK_SERVERNAME") != "" {
 		servername = os.Getenv("NETWORK_SERVERNAME")
 	} else {
