@@ -6,7 +6,6 @@ CREATE TABLE IF NOT EXISTS servers (
 CREATE TABLE IF NOT EXISTS users (
 	username varchar(32) NOT NULL UNIQUE PRIMARY KEY,
 	password bytea NOT NULL,
-	salt bytea NOT NULL UNIQUE,
 	isadmin boolean DEFAULT FALSE,
 	parentAdmin varchar(32),
 	canonical_user varchar(32) NOT NULL,
