@@ -39,6 +39,8 @@ spec:
                 secretKeyRef:
                   name: "{{ .Release.Name }}-postgresql"
                   key: postgres-password
+            - name: NETWORK_SERVERNAME
+              value: "{{index .Values.ingress.hosts 0}}"
             - name: NETWORK_ADMIN
               value: "{{ .Values.adminUser }}"
             - name: NETWORK_PASSWORD
