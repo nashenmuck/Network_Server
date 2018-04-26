@@ -1,4 +1,4 @@
-package main
+package bootstrap
 
 import (
 	"database/sql"
@@ -27,7 +27,7 @@ type Config struct {
 }
 
 //Generate the database config string as a struct based on environment variables
-func dbStringConfig() Config {
+func DbStringConfig() Config {
 	port := "8080"
 	pghost := "localhost"
 	pgport := "5432"
@@ -96,7 +96,7 @@ func dbStringConfig() Config {
 }
 
 //Use the generated config string to connect to the database and return a pointer to that connection
-func dbConfig(dbconfig Config) *sql.DB {
+func DbConfig(dbconfig Config) *sql.DB {
 	log.Println("Connecting to database...")
 	dbconnect := fmt.Sprintf("user=%s password=%s host=%s port=%s sslmode=disable dbname=%s", dbconfig.User, dbconfig.Pass, dbconfig.Host, dbconfig.DbPort, dbconfig.Database)
 	if os.Getenv("POSTGRES_PASS") == "" {
@@ -123,7 +123,7 @@ func dbConfig(dbconfig Config) *sql.DB {
 }
 
 //Perform migrations given the files provided in the `sql` folder
-func dbmigrate(db *sql.DB) {
+func Dbmigrate(db *sql.DB) {
 	log.Println("Migrating SQL definitions...")
 	driver, err := postgres.WithInstance(db, &postgres.Config{})
 	if err != nil {
@@ -143,7 +143,7 @@ func dbmigrate(db *sql.DB) {
 }
 
 //Insert the admin user and password into the db
-func bootstrapAdminAndServer(db *sql.DB, servername string, admin string, password string) {
+func BootstrapAdminAndServer(db *sql.DB, servername string, admin string, password string) {
 	log.Println("Bootstrapping admin user...")
 	stmt, err := db.Prepare("INSERT INTO servers(server) VALUES($1)")
 	if err != nil {
