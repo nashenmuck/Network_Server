@@ -26,6 +26,11 @@ func main() {
 	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
 		auth.GenAuthToken(w, r, db)
 	})
+	http.HandleFunc("/testtoken", func(w http.ResponseWriter, r *http.Request) {
+		isAuthed := auth.CheckAuthToken(w, r, db)
+		fmt.Fprintf(w, "%t", isAuthed)
+	})
+
 	log.Fatal(http.ListenAndServe(":"+config.SvcPort,
 		http.DefaultServeMux))
 }

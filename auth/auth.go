@@ -54,3 +54,30 @@ func GenAuthToken(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 	fmt.Fprintf(w, "%x", newToken)
 	return
 }
+
+func CheckAuthToken(w http.ResponseWriter, r *http.Request, db *sql.DB) bool {
+	token := r.Header.Get("Auth-Token")
+	user := r.Header.Get("User")
+	if token == "" || user == "" {
+		http.Error(w, "Auth not provided", 401)
+		return false
+	}
+	stmt, err := db.Prepare("EXISTS(SELECT FROM auth_tokens WHERE username=$1 AND token=$2)")
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Internal server error", 500)
+		return false
+	}
+	defer stmt.Close()
+	row, err := stmt.Query(user, token)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Internal server error", 500)
+		return false
+	}
+	if row == nil {
+		return false
+	} else {
+		return true
+	}
+}
