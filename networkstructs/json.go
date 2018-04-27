@@ -12,7 +12,7 @@ type Servers struct {
 
 type Users struct {
 	Username        string `json:"username"`
-	Password        []byte `json:"password"`
+	Password        string `json:"password"`
 	IsAdmin         bool   `json:"isadmin"`
 	ParentAdmin     string `json:"parentadmin"`
 	CanonicalUser   string `json:"canonical_user"`

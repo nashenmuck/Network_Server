@@ -34,7 +34,7 @@ func GenAuthToken(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		http.Error(w, err.Error(), 500)
 		return
 	}
-	err = bcrypt.CompareHashAndPassword(pass, userpass.Password)
+	err = bcrypt.CompareHashAndPassword(pass, []byte(userpass.Password))
 	if err != nil {
 		http.Error(w, "Unauthorized", 401)
 		return
