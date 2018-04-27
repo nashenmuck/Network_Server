@@ -52,6 +52,6 @@ func GenAuthToken(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		return
 	}
 	_, err = insertStmt.Exec(userpass.Username, newToken)
-	fmt.Fprintln(w, newToken)
+	fmt.Fprintf(w, "%x", newToken)
 	return
 }
