@@ -26,11 +26,16 @@ func main() {
 	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
 		auth.GenAuthToken(w, r, db)
 	})
-	http.HandleFunc("/testtoken", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/token/test", func(w http.ResponseWriter, r *http.Request) {
 		isAuthed := auth.CheckAuthToken(w, r, db)
 		fmt.Fprintf(w, "%t", isAuthed)
 	})
-
+	http.HandleFunc("/token/invite", func(w http.ResponseWriter, r *http.Request) {
+		auth.GenInviteToken(w, r, db)
+	})
+	http.HandleFunc("/token/reg", func(w http.ResponseWriter, r *http.Request) {
+		auth.RegUser(w, r, db, config.NetName)
+	})
 	log.Fatal(http.ListenAndServe(":"+config.SvcPort,
 		http.DefaultServeMux))
 }
