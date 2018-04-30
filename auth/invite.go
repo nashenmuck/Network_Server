@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/lib/pq"
-	"github.com/nashenmuck/network_server/networkstructs"
+	"github.com/nashenmuck/network_server/netjson"
 	"github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 	"log"
@@ -43,7 +43,7 @@ func RegUser(w http.ResponseWriter, r *http.Request, db *sql.DB, servername stri
 	if !CheckRegToken(w, r, db) {
 		return
 	}
-	var newUser networkstructs.Users
+	var newUser netjson.Users
 	err := newUser.Decode(w, r)
 	if err != nil {
 		return

@@ -1,4 +1,4 @@
-package networkstructs
+package netjson
 
 import (
 	"time"

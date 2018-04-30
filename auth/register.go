@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/lib/pq"
-	"github.com/nashenmuck/network_server/networkstructs"
+	"github.com/nashenmuck/network_server/netjson"
 	"github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 	"log"
@@ -12,7 +12,7 @@ import (
 )
 
 func GenAuthToken(w http.ResponseWriter, r *http.Request, db *sql.DB) {
-	var userpass networkstructs.Users
+	var userpass netjson.Users
 	err := userpass.Decode(w, r)
 	if err != nil {
 		return
