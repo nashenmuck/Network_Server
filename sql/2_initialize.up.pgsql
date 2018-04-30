@@ -34,7 +34,8 @@ CREATE TABLE IF NOT EXISTS group_followers (
 CREATE TABLE IF NOT EXISTS posts (
 	username varchar(32) NOT NULL REFERENCES users(username),
 	body text NOT NULL,
-	groupid int NOT NULL REFERENCES groups(group_id),
+	groupid int REFERENCES groups(group_id),
+	special_groupid int,
 	is_special_group boolean NOT NULL,
 	origin_server varchar NOT NULL REFERENCES servers(server),
 	date timestamp NOT NULL DEFAULT NOW()

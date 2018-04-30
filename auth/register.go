@@ -60,39 +60,23 @@ func GenAuthToken(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 	return
 }
 
-func CheckAuthToken(w http.ResponseWriter, r *http.Request, db *sql.DB) bool {
-	token := r.Header.Get("Auth-Token")
-	user := r.Header.Get("User")
-	if token == "" || user == "" {
-		http.Error(w, "Auth not provided", 401)
-		return false
+func CheckAuthToken(w http.ResponseWriter, r *http.Request, db *sql.DB) (string, error) {
+	auth_token := r.Header.Get("Auth-Token")
+	if auth_token == "" {
+		http.Error(w, "No auth token", 401)
+		return "", fmt.Errorf("No auth token")
 	}
-	stmt, err := db.Prepare("SELECT EXISTS(SELECT * FROM authtokens WHERE username=$1 AND token=$2)")
+	uuid_tok, err := uuid.FromString(auth_token)
 	if err != nil {
-		log.Println(err)
-		http.Error(w, "Internal server error", 500)
-		return false
+		http.Error(w, "Bad auth", 401)
+		return "", err
 	}
-	defer stmt.Close()
-	var isAuthed bool
-	stringTok, err := uuid.FromString(token)
+	user, err := TokenToUsername(uuid_tok.Bytes(), db)
 	if err != nil {
-		log.Println(err)
-		http.Error(w, "Unauthorized", 401)
-		return false
+		http.Error(w, "Bad auth", 401)
+		return user, err
 	}
-	err = stmt.QueryRow(user, stringTok.Bytes()).Scan(&isAuthed)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, "Internal server error", 500)
-		return false
-	}
-	if !isAuthed {
-		log.Println(err)
-		http.Error(w, "Unauthorized", 401)
-		return false
-	}
-	return isAuthed
+	return user, nil
 }
 
 func CheckRegToken(w http.ResponseWriter, r *http.Request, db *sql.DB) bool {

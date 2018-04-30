@@ -27,8 +27,12 @@ func main() {
 		auth.GenAuthToken(w, r, db)
 	})
 	http.HandleFunc("/token/test", func(w http.ResponseWriter, r *http.Request) {
-		isAuthed := auth.CheckAuthToken(w, r, db)
-		fmt.Fprintf(w, "%t", isAuthed)
+		user, err := auth.CheckAuthToken(w, r, db)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Fprintf(w, "%s", user)
 	})
 	http.HandleFunc("/token/invite", func(w http.ResponseWriter, r *http.Request) {
 		auth.GenInviteToken(w, r, db)

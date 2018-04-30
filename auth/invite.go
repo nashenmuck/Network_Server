@@ -12,7 +12,9 @@ import (
 )
 
 func GenInviteToken(w http.ResponseWriter, r *http.Request, db *sql.DB) {
-	if !CheckAuthToken(w, r, db) {
+	user, err := CheckAuthToken(w, r, db)
+	if err != nil {
+		log.Println(err)
 		return
 	}
 	tokenUUID, err := uuid.NewV4()
@@ -29,7 +31,7 @@ func GenInviteToken(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		http.Error(w, "Internal server error", 500)
 		return
 	}
-	_, err = insertStmt.Exec(r.Header.Get("User"), newToken)
+	_, err = insertStmt.Exec(user, newToken)
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "Internal server error", 500)
