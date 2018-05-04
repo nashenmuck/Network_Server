@@ -3,13 +3,12 @@ package posts
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	_ "github.com/lib/pq"
 	"github.com/nashenmuck/network_server/auth"
 	"github.com/nashenmuck/network_server/netjson"
 	"log"
 	"net/http"
-	//    "time"
-	//    "fmt"
 )
 
 func GetAllPosts(w http.ResponseWriter, r *http.Request, db *sql.DB) {
@@ -131,5 +130,6 @@ func Get_owned_posts(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 			return
 		}
 		w.Write(out)
+		fmt.Fprintf(w, "\n")
 	}
 }

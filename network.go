@@ -105,13 +105,20 @@ func main() {
 		} else {
 			http.Error(w, "Invalid method", 405)
 		}
-		http.HandleFunc("/post/getowned", func(w http.ResponseWriter, r *http.Request) {
-			if r.Method == "GET" {
-				posts.Get_owned_posts(w, r, db)
-			} else {
-				http.Error(w, "Invalid method", 405)
-			}
-		})
+	})
+	http.HandleFunc("/post/getowned", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "POST" {
+			posts.Get_owned_posts(w, r, db)
+		} else {
+			http.Error(w, "Invalid method", 405)
+		}
+	})
+	http.HandleFunc("/post/delete", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "DELETE" {
+			posts.DeletePost(w, r, db)
+		} else {
+			http.Error(w, "Invalid method", 405)
+		}
 	})
 	http.HandleFunc("/index.html", func(w http.ResponseWriter, r *http.Request) {
 		FrontPage(w, r, db)
