@@ -81,6 +81,9 @@ func main() {
 			http.Error(w, "Invalid method", 405)
 		}
 	})
+    http.HandleFunc("/index.html", func(w http.ResponseWriter, r *http.Request) {
+        FrontPage(w,r,db)
+    })
 	log.Printf("Serving on port %s\n", config.SvcPort)
 	log.Fatal(http.ListenAndServe(":"+config.SvcPort,
 		http.DefaultServeMux))

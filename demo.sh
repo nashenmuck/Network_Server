@@ -21,7 +21,7 @@ function ncj(){
 }
 nc token/test 0; echo
 
-ncj post/create 0 '{"groupid": 1, "is_special_group": true, "body": "Hello World!"}'
+ncj post/create 0 '{"group_id": 1, "is_special_group": true, "body": "Hello World!"}'
 nc post/getall 0
 
 it=$(nc token/invite 0); echo $it
@@ -35,6 +35,8 @@ ncj post/getfollowing 1 '{"since": 0}'; echo
 
 now=$(date +%s)
 sleep 1
-ncj post/create 0 '{"groupid": 2, "is_special_group": true, "body": "New Message"}'
+ncj post/create 0 '{"group_id": 2, "is_special_group": true, "body": "New Message"}'
 sleep 5
 ncj post/getfollowing 1 "{\"since\": $now}"; echo
+sleep 2
+ncj post/create 1 '{"group_id": 1, "is_special_group": true, "body": "Hello from User"}'
