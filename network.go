@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/nashenmuck/network_server/auth"
+	"github.com/nashenmuck/network_server/posts"
 	"github.com/nashenmuck/network_server/bootstrap"
 	"log"
 	"net/http"
@@ -40,6 +41,12 @@ func main() {
 	http.HandleFunc("/token/reg", func(w http.ResponseWriter, r *http.Request) {
 		auth.RegUser(w, r, db, config.NetName)
 	})
+    http.HandleFunc("/post/create", func (w http.ResponseWriter, r *http.Request) {
+       posts.Create_post(w,r,db, config.NetName) 
+    })
+    http.HandleFunc("/post/getall", func (w http.ResponseWriter, r *http.Request) {
+        posts.GetAllPosts(w,r,db)
+    })
 	log.Fatal(http.ListenAndServe(":"+config.SvcPort,
 		http.DefaultServeMux))
 }

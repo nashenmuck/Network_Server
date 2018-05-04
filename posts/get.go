@@ -16,7 +16,7 @@ func GetAllPosts(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		log.Println(err)
 		return
 	}
-	stmt, err := db.Prepare("SELECT username, body, origin_server, date FROM posts WHERE groupid=1")
+	stmt, err := db.Prepare("SELECT username, body, origin_server, date FROM posts WHERE special_groupid=1")
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "Internal server error", 500)
