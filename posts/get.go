@@ -94,3 +94,42 @@ func Get_followed_posts(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		w.Write(out)
 	}
 }
+
+func Get_owned_posts(w http.ResponseWriter, r *http.Request, db *sql.DB) {
+	user, err := auth.CheckAuthToken(w, r, db)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	dec := json.NewDecoder(r.Body)
+	var data struct {
+		Since int `json:"since"`
+	}
+	err = dec.Decode(&data)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	stmt, err := db.Prepare("SELECT id, username, body FROM posts WHERE date > to_timestamp($1) AND posts.username=$2")
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	defer stmt.Close()
+	row, err := stmt.Query(data.Since, user)
+	w.Header().Set("content-type", "application/json")
+	var post RetPost
+	for row.Next() {
+		err := row.Scan(&post.PostID, &post.Username, &post.Body)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		out, err := json.Marshal(post)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		w.Write(out)
+	}
+}

@@ -6,8 +6,8 @@ import (
 	"github.com/nashenmuck/network_server/auth"
 	"github.com/nashenmuck/network_server/bootstrap"
 	"github.com/nashenmuck/network_server/follow"
-	"github.com/nashenmuck/network_server/posts"
 	"github.com/nashenmuck/network_server/group"
+	"github.com/nashenmuck/network_server/posts"
 	"log"
 	"net/http"
 )
@@ -78,14 +78,14 @@ func main() {
 			http.Error(w, "Invalid method", 405)
 		}
 	})
-    http.HandleFunc("/follow/getfollowed", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/follow/getfollowed", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "GET" {
 			follow.Get_followed(w, r, db, config.NetName)
 		} else {
 			http.Error(w, "Invalid method", 405)
 		}
 	})
-    http.HandleFunc("/follow/getfollowers", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/follow/getfollowers", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "GET" {
 			follow.Get_following(w, r, db, config.NetName)
 		} else {
@@ -105,16 +105,31 @@ func main() {
 		} else {
 			http.Error(w, "Invalid method", 405)
 		}
+		http.HandleFunc("/post/getowned", func(w http.ResponseWriter, r *http.Request) {
+			if r.Method == "GET" {
+				posts.Get_owned_posts(w, r, db)
+			} else {
+				http.Error(w, "Invalid method", 405)
+			}
+		})
 	})
-    http.HandleFunc("/index.html", func(w http.ResponseWriter, r *http.Request) {
-        FrontPage(w,r,db)
-    })
-    http.HandleFunc("/group/create", func(w http.ResponseWriter, r *http.Request) {
-        group.Create_group(w,r,db)
-    })
-    http.HandleFunc("/group/assign", func(w http.ResponseWriter, r *http.Request) {
-        group.Assign_user_to_group(w,r,db,config.NetName)
-    })
+	http.HandleFunc("/index.html", func(w http.ResponseWriter, r *http.Request) {
+		FrontPage(w, r, db)
+	})
+	http.HandleFunc("/group/create", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "POST" {
+			group.Create_group(w, r, db)
+		} else {
+			http.Error(w, "Invalid method", 405)
+		}
+	})
+	http.HandleFunc("/group/assign", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "POST" {
+			group.Assign_user_to_group(w, r, db, config.NetName)
+		} else {
+			http.Error(w, "Invalid method", 405)
+		}
+	})
 	log.Printf("Serving on port %s\n", config.SvcPort)
 	log.Fatal(http.ListenAndServe(":"+config.SvcPort,
 		http.DefaultServeMux))
