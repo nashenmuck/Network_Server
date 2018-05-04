@@ -6,6 +6,7 @@ import (
 	"github.com/nashenmuck/network_server/auth"
 	"github.com/nashenmuck/network_server/posts"
 	"github.com/nashenmuck/network_server/bootstrap"
+	"github.com/nashenmuck/network_server/follow"
 	"log"
 	"net/http"
 )
@@ -46,6 +47,12 @@ func main() {
     })
     http.HandleFunc("/post/getall", func (w http.ResponseWriter, r *http.Request) {
         posts.GetAllPosts(w,r,db)
+    })
+    http.HandleFunc("/post/getfollowing", func (w http.ResponseWriter, r *http.Request) {
+        posts.Get_followed_posts(w,r,db)
+    })
+    http.HandleFunc("/follow/follow", func (w http.ResponseWriter, r *http.Request) {
+        follow.Follow_user(w,r,db, config.NetName)
     })
 	log.Fatal(http.ListenAndServe(":"+config.SvcPort,
 		http.DefaultServeMux))

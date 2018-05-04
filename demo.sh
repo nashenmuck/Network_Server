@@ -2,23 +2,34 @@ tok=$(curl --header "Content-Type: application/json" --request POST\
     --data '{"username": "admin", "password": "password"}'\
     http://localhost:8080/login -q)
 echo $tok
+declare -a tokens
+tokens[0]=$tok
 function nc(){
     r=$1;
-    shift
-    curl -q -H "Auth-Token: $tok" \
-        $@\
+    i=$2;
+    shift; shift;
+    curl -q -H "Auth-Token: ${tokens[$i]}" \
+        "$@"\
         http://localhost:8080/$r
 }
 function ncj(){
-    r=$1;
-     curl -q -H "Auth-Token: $tok" \
-        -H "Content-Type: application/json"\
-        --request POST\
-        --data "$2"\
-        http://localhost:8080/$r
+    a=$1
+    b=$2
+    c=$3
+    shift;shift;shift
+    nc $a $b --data "$c" "$@" -H "Content-Type: application/json" --request POST
 }
-nc token/test; echo
+nc token/test 0; echo
 
-ncj post/create '{"target": 1, "special": true, "post": "Hello World!"}'
+ncj post/create 0 '{"target": 1, "special": true, "post": "Hello World!"}'
+method
+nc post/getall 0
 
-nc post/getall
+it=$(nc token/invite 0); echo $it
+ncj token/reg 0 '{"username": "testuser", "password": "testuser"}' -H "Reg-Token: $it"
+nt=$(ncj login 0 '{"username": "testuser", "password": "testuser"}');echo $nt
+tokens[1]=$nt
+
+ncj follow/follow 1 '{"username": "admin"}'
+
+ncj post/getfollowing 1 '{"since": 0}'
