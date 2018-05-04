@@ -35,6 +35,6 @@ func Create_post(w http.ResponseWriter, r *http.Request, db *sql.DB, nn string) 
 	if err != nil {
 		return
 	}
-	st.Query(user, data.Body, data.GroupId, nn)
 	defer st.Close()
+	st.Query(user, data.Body, data.GroupId, nn)
 }

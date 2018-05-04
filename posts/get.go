@@ -76,7 +76,7 @@ func Get_followed_posts(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		log.Println(err)
 		return
 	}
-	// tm, err := time.Parse(time.UnixDate, string(data.Since))
+	defer stmt.Close()
 	row, err := stmt.Query(data.Since, user)
 	w.Header().Set("content-type", "application/json")
 	var post RetPost
