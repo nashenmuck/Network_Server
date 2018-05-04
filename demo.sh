@@ -65,3 +65,5 @@ msg Showing users the new user follows
 nc follow/getfollowed 1 
 msg Showing users following admin
 nc follow/getfollowers 0
+msg Creating a new group
+gid=$(ncj group/create 0 '{"name":"generic"}'); echo $gid

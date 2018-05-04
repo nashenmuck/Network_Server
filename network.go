@@ -7,6 +7,7 @@ import (
 	"github.com/nashenmuck/network_server/bootstrap"
 	"github.com/nashenmuck/network_server/follow"
 	"github.com/nashenmuck/network_server/posts"
+	"github.com/nashenmuck/network_server/group"
 	"log"
 	"net/http"
 )
@@ -107,6 +108,9 @@ func main() {
 	})
     http.HandleFunc("/index.html", func(w http.ResponseWriter, r *http.Request) {
         FrontPage(w,r,db)
+    })
+    http.HandleFunc("/group/create", func(w http.ResponseWriter, r *http.Request) {
+        group.Create_group(w,r,db)
     })
 	log.Printf("Serving on port %s\n", config.SvcPort)
 	log.Fatal(http.ListenAndServe(":"+config.SvcPort,
