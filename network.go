@@ -4,9 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/nashenmuck/network_server/auth"
-	"github.com/nashenmuck/network_server/posts"
 	"github.com/nashenmuck/network_server/bootstrap"
 	"github.com/nashenmuck/network_server/follow"
+	"github.com/nashenmuck/network_server/posts"
 	"log"
 	"net/http"
 )
@@ -21,26 +21,52 @@ func main() {
 	db := bootstrap.DbConfig(config)
 	bootstrap.Dbmigrate(db)
 	bootstrap.BootstrapAdminAndServer(db, config.NetName, config.NetAdmin, config.NetPass)
-	log.Printf("Serving on port %s\n", config.SvcPort)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		dummyrequest(w, r, db)
+		if r.Method == "GET" {
+			dummyrequest(w, r, db)
+		} else {
+			http.Error(w, "Invalid method", 405)
+		}
 	})
 	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
-		auth.GenAuthToken(w, r, db)
+		if r.Method == "POST" {
+			auth.GenAuthToken(w, r, db)
+		} else {
+			http.Error(w, "Invalid method", 405)
+		}
 	})
 	http.HandleFunc("/token/test", func(w http.ResponseWriter, r *http.Request) {
-		user, err := auth.CheckAuthToken(w, r, db)
-		if err != nil {
-			fmt.Println(err)
-			return
+		if r.Method == "GET" {
+			user, err := auth.CheckAuthToken(w, r, db)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			fmt.Fprintf(w, "%s\n", user)
+		} else {
+			http.Error(w, "Invalid method", 405)
 		}
-		fmt.Fprintf(w, "%s", user)
 	})
 	http.HandleFunc("/token/invite", func(w http.ResponseWriter, r *http.Request) {
-		auth.GenInviteToken(w, r, db)
+		if r.Method == "GET" {
+			auth.GenInviteToken(w, r, db)
+		} else {
+			http.Error(w, "Invalid method", 405)
+		}
 	})
 	http.HandleFunc("/token/reg", func(w http.ResponseWriter, r *http.Request) {
-		auth.RegUser(w, r, db, config.NetName)
+		if r.Method == "POST" {
+			auth.RegUser(w, r, db, config.NetName)
+		} else {
+			http.Error(w, "Invalid method", 405)
+		}
+	})
+	http.HandleFunc("/post/create", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "POST" {
+			posts.Create_post(w, r, db, config.NetName)
+		} else {
+			http.Error(w, "Invalid method", 405)
+		}
 	})
     http.HandleFunc("/post/create", func (w http.ResponseWriter, r *http.Request) {
        posts.Create_post(w,r,db, config.NetName) 
@@ -54,6 +80,14 @@ func main() {
     http.HandleFunc("/follow/follow", func (w http.ResponseWriter, r *http.Request) {
         follow.Follow_user(w,r,db, config.NetName)
     })
+	http.HandleFunc("/post/getall", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "GET" {
+			posts.GetAllPosts(w, r, db)
+		} else {
+			http.Error(w, "Invalid method", 405)
+		}
+	})
+	log.Printf("Serving on port %s\n", config.SvcPort)
 	log.Fatal(http.ListenAndServe(":"+config.SvcPort,
 		http.DefaultServeMux))
 }

@@ -40,10 +40,12 @@ type GroupFollowers struct {
 }
 
 type Posts struct {
-	Username       string    `json:"username"`
-	Body           string    `json:"body"`
-	GroupId        int       `json:"group_id"`
-	IsSpecialGroup bool      `json:"is_special_group"`
-	OriginServer   string    `json:"origin_server"`
-	Date           time.Time `json:"date"`
+	Id              int       `json:"post_id"`
+	Username        string    `json:"username"`
+	Body            string    `json:"body"`
+	GroupId         int       `json:"group_id"`
+	SpecialGroupdId string    `json:"special_group_id"`
+	IsSpecialGroup  bool      `json:"is_special_group"`
+	OriginServer    string    `json:"origin_server"`
+	Date            time.Time `json:"date"`
 }
