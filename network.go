@@ -112,6 +112,9 @@ func main() {
     http.HandleFunc("/group/create", func(w http.ResponseWriter, r *http.Request) {
         group.Create_group(w,r,db)
     })
+    http.HandleFunc("/group/assign", func(w http.ResponseWriter, r *http.Request) {
+        group.Assign_user_to_group(w,r,db,config.NetName)
+    })
 	log.Printf("Serving on port %s\n", config.SvcPort)
 	log.Fatal(http.ListenAndServe(":"+config.SvcPort,
 		http.DefaultServeMux))
