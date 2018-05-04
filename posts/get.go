@@ -8,6 +8,8 @@ import (
 	"github.com/nashenmuck/network_server/netjson"
 	"log"
 	"net/http"
+//    "time"
+//    "fmt"
 )
 
 func GetAllPosts(w http.ResponseWriter, r *http.Request, db *sql.DB) {
@@ -68,11 +70,12 @@ func Get_followed_posts(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		log.Println(err)
         return
     }
-    stmt, err := db.Prepare("SELECT id, username, body FROM posts WHERE date > $1 AND posts.username in (SELECT followerId from followers where followeeId = $2) AND (posts.is_special_group = TRUE OR $2 in (select follower from group_followers where group_id = posts.groupid))")
+    stmt, err := db.Prepare("SELECT id, username, body FROM posts WHERE date > to_timestamp($1) AND posts.username in (SELECT followeeId from followers where followerId = $2) AND (posts.is_special_group = TRUE OR $2 in (select follower from group_followers where group_id = posts.groupid))")
     if err != nil {
 		log.Println(err)
         return
     }
+   // tm, err := time.Parse(time.UnixDate, string(data.Since))
 	row, err := stmt.Query(data.Since, user)
 	w.Header().Set("content-type", "application/json")
     var post RetPost

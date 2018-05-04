@@ -68,12 +68,6 @@ func main() {
 			http.Error(w, "Invalid method", 405)
 		}
 	})
-    http.HandleFunc("/post/create", func (w http.ResponseWriter, r *http.Request) {
-       posts.Create_post(w,r,db, config.NetName) 
-    })
-    http.HandleFunc("/post/getall", func (w http.ResponseWriter, r *http.Request) {
-        posts.GetAllPosts(w,r,db)
-    })
     http.HandleFunc("/post/getfollowing", func (w http.ResponseWriter, r *http.Request) {
         posts.Get_followed_posts(w,r,db)
     })
