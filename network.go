@@ -22,8 +22,10 @@ func main() {
 	bootstrap.Dbmigrate(db)
 	bootstrap.BootstrapAdminAndServer(db, config.NetName, config.NetAdmin, config.NetPass)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == "GET" {
+		if r.Method == "GET" && r.URL.Path == "/" {
 			dummyrequest(w, r, db)
+		} else if r.URL.Path != "/" {
+			http.Error(w, "Not found", 404)
 		} else {
 			http.Error(w, "Invalid method", 405)
 		}
