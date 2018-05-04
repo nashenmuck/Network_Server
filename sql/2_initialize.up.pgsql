@@ -31,9 +31,9 @@ CREATE TABLE IF NOT EXISTS group_followers (
 	follower_server varchar references servers(server),
 	UNIQUE (group_id, follower)
 );
-CREATE SEQUENCE post_id_seq;
+CREATE SEQUENCE IF NOT EXISTS post_id_seq;
 CREATE TABLE IF NOT EXISTS posts (
-    id int primary key default nextval('post_id_seq'),
+	id int primary key default nextval('post_id_seq'),
 	username varchar(32) NOT NULL REFERENCES users(username),
 	body text NOT NULL,
 	groupid int REFERENCES groups(group_id),
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS audit (
 	event_type varchar,
 	event_message varchar
 );
-CREATE INDEX user_index ON users (username);
-CREATE INDEX groups_index ON groups (group_id,owner);
-CREATE INDEX posts_user_index ON posts (username);
-CREATE INDEX posts_time_index ON posts (date);
+CREATE INDEX IF NOT EXISTS user_index ON users (username);
+CREATE INDEX IF NOT EXISTS groups_index ON groups (group_id,owner);
+CREATE INDEX IF NOT EXISTS posts_user_index ON posts (username);
+CREATE INDEX IF NOT EXISTS posts_time_index ON posts (date);
