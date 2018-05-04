@@ -11,8 +11,9 @@ CREATE TABLE IF NOT EXISTS users (
 	canonical_user varchar(32) NOT NULL,
 	canonical_server varchar NOT NULL REFERENCES servers(server)
 );
+CREATE SEQUENCE group_id_seq;
 CREATE TABLE IF NOT EXISTS groups (
-	group_id int NOT NULL UNIQUE,
+	group_id int NOT NULL UNIQUE DEFAULT nextval('group_id_seq'),
 	owner varchar(32) NOT NULL REFERENCES users(username),
 	group_name varchar(32) NOT NULL,
 	PRIMARY KEY (group_id, owner),
@@ -31,7 +32,7 @@ CREATE TABLE IF NOT EXISTS group_followers (
 	follower_server varchar references servers(server),
 	UNIQUE (group_id, follower)
 );
-CREATE SEQUENCE IF NOT EXISTS post_id_seq;
+CREATE SEQUENCE post_id_seq;
 CREATE TABLE IF NOT EXISTS posts (
 	id int primary key default nextval('post_id_seq'),
 	username varchar(32) NOT NULL REFERENCES users(username),
