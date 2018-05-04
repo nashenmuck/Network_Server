@@ -1,16 +1,19 @@
+URL=http://localhost:8080
+DOCHK=1
+
 chk(){
-    return 0
+    return $DOCHK
 }
 msg(){
     if  chk;  then return; fi
     echo; echo $@;
-    read -p "> " yn
     sleep 1
+    read -p "> " yn
 }   
 msg Logging in as admin
 tok=$(curl --header "Content-Type: application/json" --request POST\
     --data '{"username": "admin", "password": "password"}'\
-    http://localhost:8080/login -q)
+    $URL/login -q)
 echo $tok
 declare -a tokens
 tokens[0]=$tok
@@ -20,7 +23,7 @@ function nc(){
     shift; shift;
     curl -q -H "Auth-Token: ${tokens[$i]}" \
         "$@"\
-        http://localhost:8080/$r
+        $URL/$r
 }
 function ncj(){
     a=$1
@@ -56,7 +59,7 @@ ncj post/getfollowing 1 '{"since": 0}'; echo
 now=$(date +%s)
 msg Creating a new post as admin
 ncj post/create 0 '{"group_id": 2, "is_special_group": true, "body": "New Message"}'
-sleep 5
+sleep 1
 msg Fetching the new post as the new user using a timestamp
 ncj post/getfollowing 1 "{\"since\": $now}"; echo
 msg Creating a post as the new user
