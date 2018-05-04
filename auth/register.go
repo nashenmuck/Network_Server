@@ -56,7 +56,7 @@ func GenAuthToken(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		http.Error(w, "Internal server error", 500)
 		return
 	}
-	fmt.Fprintf(w, "%s", tokenUUID.String())
+	fmt.Fprintf(w, "%s\n", tokenUUID.String())
 	return
 }
 
@@ -77,38 +77,4 @@ func CheckAuthToken(w http.ResponseWriter, r *http.Request, db *sql.DB) (string,
 		return user, err
 	}
 	return user, nil
-}
-
-func CheckRegToken(w http.ResponseWriter, r *http.Request, db *sql.DB) bool {
-	token := r.Header.Get("Reg-Token")
-	if token == "" {
-		http.Error(w, "Auth not provided", 401)
-		return false
-	}
-	stmt, err := db.Prepare("SELECT EXISTS(SELECT * FROM regtokens WHERE token=$1)")
-	if err != nil {
-		log.Println(err)
-		http.Error(w, "Internal server error", 500)
-		return false
-	}
-	defer stmt.Close()
-	var isAuthed bool
-	stringTok, err := uuid.FromString(token)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, "Unauthorized", 401)
-		return false
-	}
-	err = stmt.QueryRow(stringTok.Bytes()).Scan(&isAuthed)
-	if err != nil {
-		log.Println(err)
-		http.Error(w, "Internal server error", 500)
-		return false
-	}
-	if !isAuthed {
-		log.Println(err)
-		http.Error(w, "Unauthorized", 401)
-		return false
-	}
-	return isAuthed
 }
