@@ -68,12 +68,20 @@ func main() {
 			http.Error(w, "Invalid method", 405)
 		}
 	})
-    http.HandleFunc("/post/getfollowing", func (w http.ResponseWriter, r *http.Request) {
-        posts.Get_followed_posts(w,r,db)
-    })
-    http.HandleFunc("/follow/follow", func (w http.ResponseWriter, r *http.Request) {
-        follow.Follow_user(w,r,db, config.NetName)
-    })
+	http.HandleFunc("/post/getfollowing", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "GET" {
+			posts.Get_followed_posts(w, r, db)
+		} else {
+			http.Error(w, "Invalid method", 405)
+		}
+	})
+	http.HandleFunc("/follow/follow", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "POST" {
+			follow.Follow_user(w, r, db, config.NetName)
+		} else {
+			http.Error(w, "Invalid method", 405)
+		}
+	})
 	http.HandleFunc("/post/getall", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "GET" {
 			posts.GetAllPosts(w, r, db)
