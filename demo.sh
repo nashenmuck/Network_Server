@@ -40,3 +40,5 @@ sleep 5
 ncj post/getfollowing 1 "{\"since\": $now}"; echo
 sleep 2
 ncj post/create 1 '{"group_id": 1, "is_special_group": true, "body": "Hello from User"}'
+
+nc follow/getfollowed 1 
