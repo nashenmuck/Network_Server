@@ -24,7 +24,8 @@ CREATE TABLE IF NOT EXISTS followers (
 	followee_server varchar NOT NULL REFERENCES servers(server),
 	followerId varchar(32) NOT NULL REFERENCES users(username), 
 	follower_server varchar NOT NULL REFERENCES servers(server),
-	followedwhen timestamp NOT NULL DEFAULT NOW()
+	followedwhen timestamp NOT NULL DEFAULT NOW(),
+    UNIQUE(followeeId, followee_server, followerId, follower_server)
 );
 CREATE TABLE IF NOT EXISTS group_followers (
 	group_id int NOT NULL REFERENCES groups(group_id),

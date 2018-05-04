@@ -82,6 +82,13 @@ func main() {
 			http.Error(w, "Invalid method", 405)
 		}
 	})
+    http.HandleFunc("/follow/getfollowers", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "GET" {
+			follow.Get_following(w, r, db, config.NetName)
+		} else {
+			http.Error(w, "Invalid method", 405)
+		}
+	})
 	http.HandleFunc("/follow/follow", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "POST" {
 			follow.Follow_user(w, r, db, config.NetName)
