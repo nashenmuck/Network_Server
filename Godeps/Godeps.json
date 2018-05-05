@@ -1,0 +1,58 @@
+{
+	"ImportPath": "github.com/nashenmuck/network_server",
+	"GoVersion": "go1.9",
+	"GodepVersion": "v62",
+	"Packages": [
+		"./..."
+	],
+	"Deps": [
+		{
+			"ImportPath": "github.com/golang-migrate/migrate",
+			"Comment": "v3.2.0-4-g2b28a0b",
+			"Rev": "2b28a0bc0a80c60f9290b9a0d02c95a70cd5ebdd"
+		},
+		{
+			"ImportPath": "github.com/golang-migrate/migrate/database",
+			"Comment": "v3.2.0-4-g2b28a0b",
+			"Rev": "2b28a0bc0a80c60f9290b9a0d02c95a70cd5ebdd"
+		},
+		{
+			"ImportPath": "github.com/golang-migrate/migrate/database/postgres",
+			"Comment": "v3.2.0-4-g2b28a0b",
+			"Rev": "2b28a0bc0a80c60f9290b9a0d02c95a70cd5ebdd"
+		},
+		{
+			"ImportPath": "github.com/golang-migrate/migrate/source",
+			"Comment": "v3.2.0-4-g2b28a0b",
+			"Rev": "2b28a0bc0a80c60f9290b9a0d02c95a70cd5ebdd"
+		},
+		{
+			"ImportPath": "github.com/golang-migrate/migrate/source/file",
+			"Comment": "v3.2.0-4-g2b28a0b",
+			"Rev": "2b28a0bc0a80c60f9290b9a0d02c95a70cd5ebdd"
+		},
+		{
+			"ImportPath": "github.com/lib/pq",
+			"Comment": "go1.0-cutoff-210-gd34b9ff",
+			"Rev": "d34b9ff171c21ad295489235aec8b6626023cd04"
+		},
+		{
+			"ImportPath": "github.com/lib/pq/oid",
+			"Comment": "go1.0-cutoff-210-gd34b9ff",
+			"Rev": "d34b9ff171c21ad295489235aec8b6626023cd04"
+		},
+		{
+			"ImportPath": "github.com/satori/go.uuid",
+			"Comment": "v1.2.0-4-g36e9d2e",
+			"Rev": "36e9d2ebbde5e3f13ab2e25625fd453271d6522e"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/bcrypt",
+			"Rev": "b49d69b5da943f7ef3c9cf91c8777c1f78a0cc3c"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/blowfish",
+			"Rev": "b49d69b5da943f7ef3c9cf91c8777c1f78a0cc3c"
+		}
+	]
+}
