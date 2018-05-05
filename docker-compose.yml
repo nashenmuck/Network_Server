@@ -1,0 +1,43 @@
+version: '2.1'
+
+services:
+
+  postgres:
+    image: postgres:10.3
+    volumes:
+      - data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - network
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+  network:
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    networks:
+      - network
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "http://localhost:8080/healthz"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "postgres://postgres:root@postgres/postgres?sslmode=disable"
+      NETWORK_ADMIN: "admin"
+      NETWORK_PASSWORD: "password"
+networks:
+  network:
+    driver: bridge
+volumes:
+  data:
