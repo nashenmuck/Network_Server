@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	_ "github.com/lib/pq"
+	
 	"github.com/nashenmuck/network_server/auth"
 	"github.com/nashenmuck/network_server/netjson"
 	"log"

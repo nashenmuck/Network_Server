@@ -22,13 +22,14 @@ func main() {
 	db := bootstrap.DbConfig(config)
 	bootstrap.Dbmigrate(db)
 	bootstrap.BootstrapAdminAndServer(db, config.NetName, config.NetAdmin, config.NetPass)
+	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
+		dummyrequest(w, r, db)
+	})
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == "GET" && r.URL.Path == "/" {
-			dummyrequest(w, r, db)
-		} else if r.URL.Path != "/" {
-			http.Error(w, "Not found", 404)
+		if r.URL.Path == "/" {
+			FrontPage(w, r, db)
 		} else {
-			http.Error(w, "Invalid method", 405)
+			http.Error(w, "Not found", 404)
 		}
 	})
 	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
@@ -119,9 +120,6 @@ func main() {
 		} else {
 			http.Error(w, "Invalid method", 405)
 		}
-	})
-	http.HandleFunc("/index.html", func(w http.ResponseWriter, r *http.Request) {
-		FrontPage(w, r, db)
 	})
 	http.HandleFunc("/group/create", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "POST" {
