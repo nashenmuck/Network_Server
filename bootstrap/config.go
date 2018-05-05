@@ -13,19 +13,19 @@ import (
 
 //Generate the database config string as a struct based on environment variables
 func DbStringConfig() Config {
-	if os.Getenv("DATABASE_URL") == "" {
-		port := "8080"
-		pghost := "localhost"
-		pgport := "5432"
-		pguser := "postgres"
-		pgdb := "postgres"
-		pgpass := ""
-		if os.Getenv("PORT") != "" {
-			port = os.Getenv("PORT")
-		} else {
-			log.Println("Service port not found, using default 8080")
-		}
+	port := "8080"
+	pghost := "localhost"
+	pgport := "5432"
+	pguser := "postgres"
+	pgdb := "postgres"
+	pgpass := ""
+	if os.Getenv("PORT") != "" {
+		port = os.Getenv("PORT")
+	} else {
+		log.Println("Service port not found, using default 8080")
+	}
 
+	if os.Getenv("DATABASE_URL") == "" {
 		if os.Getenv("POSTGRES_HOST") != "" {
 			pghost = os.Getenv("POSTGRES_HOST")
 		} else {
@@ -56,6 +56,7 @@ func DbStringConfig() Config {
 		if err != nil {
 			log.Fatal(err)
 		}
+
 		servername := uuid.String()
 		if os.Getenv("NETWORK_SERVERNAME") != "" {
 			servername = os.Getenv("NETWORK_SERVERNAME")
@@ -86,7 +87,34 @@ func DbStringConfig() Config {
 			NetPass:  password}
 	} else {
 		log.Println("Database url set, using")
-		return Config{}
+		uuid, err := uuid.NewV4()
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		servername := uuid.String()
+		if os.Getenv("NETWORK_SERVERNAME") != "" {
+			servername = os.Getenv("NETWORK_SERVERNAME")
+		} else {
+			servername = "network-" + servername
+			log.Printf("Servername not set, using %s", servername)
+		}
+		admin, password := "admin", "password"
+		if os.Getenv("NETWORK_ADMIN") != "" {
+			admin = os.Getenv("NETWORK_ADMIN")
+		} else {
+			log.Printf("Network admin username not set, using \"%s\"\n", admin)
+		}
+		if os.Getenv("NETWORK_PASSWORD") != "" {
+			password = os.Getenv("NETWORK_PASSWORD")
+		} else {
+			log.Printf("Network admin password not set, using \"%s\"\n", password)
+		}
+		return Config{
+			SvcPort:  port,
+			NetName:  servername,
+			NetAdmin: admin,
+			NetPass:  password}
 	}
 }
 
