@@ -11,8 +11,9 @@ CREATE TABLE IF NOT EXISTS users (
 	canonical_user varchar(32) NOT NULL,
 	canonical_server varchar NOT NULL REFERENCES servers(server)
 );
+CREATE SEQUENCE group_id_seq;
 CREATE TABLE IF NOT EXISTS groups (
-	group_id int NOT NULL UNIQUE,
+	group_id int NOT NULL UNIQUE DEFAULT nextval('group_id_seq'),
 	owner varchar(32) NOT NULL REFERENCES users(username),
 	group_name varchar(32) NOT NULL,
 	PRIMARY KEY (group_id, owner),
@@ -23,7 +24,8 @@ CREATE TABLE IF NOT EXISTS followers (
 	followee_server varchar NOT NULL REFERENCES servers(server),
 	followerId varchar(32) NOT NULL REFERENCES users(username), 
 	follower_server varchar NOT NULL REFERENCES servers(server),
-	followedwhen timestamp NOT NULL DEFAULT NOW()
+	followedwhen timestamp NOT NULL DEFAULT NOW(),
+    UNIQUE(followeeId, followee_server, followerId, follower_server)
 );
 CREATE TABLE IF NOT EXISTS group_followers (
 	group_id int NOT NULL REFERENCES groups(group_id),
@@ -31,10 +33,13 @@ CREATE TABLE IF NOT EXISTS group_followers (
 	follower_server varchar references servers(server),
 	UNIQUE (group_id, follower)
 );
+CREATE SEQUENCE post_id_seq;
 CREATE TABLE IF NOT EXISTS posts (
+	id int primary key default nextval('post_id_seq'),
 	username varchar(32) NOT NULL REFERENCES users(username),
 	body text NOT NULL,
-	groupid int NOT NULL REFERENCES groups(group_id),
+	groupid int REFERENCES groups(group_id),
+	special_groupid int,
 	is_special_group boolean NOT NULL,
 	origin_server varchar NOT NULL REFERENCES servers(server),
 	date timestamp NOT NULL DEFAULT NOW()
@@ -52,7 +57,7 @@ CREATE TABLE IF NOT EXISTS audit (
 	event_type varchar,
 	event_message varchar
 );
-CREATE INDEX user_index ON users (username);
-CREATE INDEX groups_index ON groups (group_id,owner);
-CREATE INDEX posts_user_index ON posts (username);
-CREATE INDEX posts_time_index ON posts (date);
+CREATE INDEX IF NOT EXISTS user_index ON users (username);
+CREATE INDEX IF NOT EXISTS groups_index ON groups (group_id,owner);
+CREATE INDEX IF NOT EXISTS posts_user_index ON posts (username);
+CREATE INDEX IF NOT EXISTS posts_time_index ON posts (date);
