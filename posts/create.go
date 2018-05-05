@@ -3,7 +3,7 @@ package posts
 import (
 	"database/sql"
 	"fmt"
-	_ "github.com/lib/pq"
+	
 	"github.com/nashenmuck/network_server/auth"
 	"github.com/nashenmuck/network_server/netjson"
 	"log"
