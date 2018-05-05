@@ -13,19 +13,19 @@ import (
 
 //Generate the database config string as a struct based on environment variables
 func DbStringConfig() Config {
-	if os.Getenv("DATABASE_URL") == "" {
-		port := "8080"
-		pghost := "localhost"
-		pgport := "5432"
-		pguser := "postgres"
-		pgdb := "postgres"
-		pgpass := ""
-		if os.Getenv("PORT") != "" {
-			port = os.Getenv("PORT")
-		} else {
-			log.Println("Service port not found, using default 8080")
-		}
+	port := "8080"
+	pghost := "localhost"
+	pgport := "5432"
+	pguser := "postgres"
+	pgdb := "postgres"
+	pgpass := ""
+	if os.Getenv("PORT") != "" {
+		port = os.Getenv("PORT")
+	} else {
+		log.Println("Service port not found, using default 8080")
+	}
 
+	if os.Getenv("DATABASE_URL") == "" {
 		if os.Getenv("POSTGRES_HOST") != "" {
 			pghost = os.Getenv("POSTGRES_HOST")
 		} else {
