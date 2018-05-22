@@ -11,6 +11,10 @@ A Dockerfile is also supplied and can be built in the root project directory wit
 docker build -t nashenmuck/network .
 ```
 If you are about to deploy to Minikube, and wish to test your build on there, you may wish to run `eval $(minikube docker-env)` before building the Docker image.
+### Testing
+A `docker-compose.yaml` is included to more easily facilitate testing. In order to test this, you must have Docker and docker-compose installed. Instructions for both can be found [here](https://docs.docker.com/install/) and [here](https://docs.docker.com/compose/install/). After installing both, run `docker-compose up -d` in the root project directory. It will start up a Postgres container and build an image for the Network server. The server can then be accessed from `http://localhost:8080`. To stop it, run `docker-compose down`.
+
+If you wish to test without Docker, build the project using `go build`, then run a Postgres database, either as a local installation or in a Docker container. The Network server can then be started with `./network_server`. It will assume any environment variables not set, and thus assumes the Postgres database is running on `localhost`.
 ### Deploying
 Network is Kubernetes native, and comes with a Helm chart for deployment. It has Postgres as a dependency, which will be installed along with the Network server. It can be installed with:
 ```
