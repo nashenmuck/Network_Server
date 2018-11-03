@@ -1,6 +1,6 @@
 dependencies:
 - name: postgresql
-  version: 2.2.0
+  version: 2.2.4
   repository: https://kubernetes-charts.storage.googleapis.com/
   tags:
     - network-database
