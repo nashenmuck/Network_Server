@@ -1,3 +1,13 @@
 apiVersion: v1
-entries: {}
-generated: 2019-03-02T11:48:05.324291303-05:00
+entries:
+  network:
+  - apiVersion: v1
+    appVersion: "1.1"
+    created: 2019-03-02T11:57:58.868704842-05:00
+    description: Helm chart for the Network social media server
+    digest: 120c1f60c56e6944e872d454d5fa92b186773f738aeb3571002d4597ca1102e9
+    name: network
+    urls:
+    - network-0.1.7.tgz
+    version: 0.1.7
+generated: 2019-03-02T11:57:58.866414347-05:00
