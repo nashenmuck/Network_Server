@@ -1,6 +1,11 @@
 kind: pipeline
 name: default
 steps:
+  - name: docker_test
+    image: docker
+    commands:
+      - docker-compose up -d
+      - yes | ./demo.sh
   - name: docker
     image: plugins/docker
     settings:
