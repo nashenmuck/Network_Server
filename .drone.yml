@@ -4,6 +4,7 @@ steps:
   - name: docker_test
     image: docker
     commands:
+      - echo "Random change"
       - docker-compose up -d
       - yes | ./demo.sh
   - name: docker
