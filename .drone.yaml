@@ -4,5 +4,8 @@ steps:
   - name: docker
     image: plugins/docker
     settings:
-      username: dvdmuckle
+      username: nashenmuck
       password:
+        from_secret: docker_password
+      repo: nashenmuck/network
+      tag: develop
