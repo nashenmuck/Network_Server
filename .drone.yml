@@ -2,15 +2,21 @@ kind: pipeline
 name: default
 steps:
   - name: docker_test
-    image: docker
+    image: docker:18.06.3-ce
     commands:
+      - export DOCKER_HOST=tcp://docker:2375
+      - apk add --no-cache py-pip && pip install docker-compose
       - docker-compose up -d
       - yes | ./demo.sh
-  - name: docker
+  - name: docker_build
     image: plugins/docker
     settings:
       username: nashenmuck
       password:
         from_secret: docker_password
       repo: nashenmuck/network
-      tag: develop
+      tag: develops
+services:
+  - name: docker
+    image: docker:18.06.3-ce-dind
+    privileged: true
