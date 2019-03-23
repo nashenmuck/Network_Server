@@ -1,4 +1,8 @@
-URL=http://localhost:8080
+if [ -z $1 ]; then
+	URL=http://localhost:8080
+else
+	URL=$1
+fi
 DOCHK=1
 
 chk(){

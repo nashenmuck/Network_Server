@@ -6,7 +6,7 @@ steps:
     commands:
       - apk add --no-cache py-pip curl bash && pip install docker-compose
       - docker-compose up -d
-      - yes | bash demo.sh
+      - yes | bash demo.sh http://docker:8080
     volumes:
       - name: dockersock
         path: /var/run
