@@ -4,10 +4,12 @@ steps:
   - name: docker_test
     image: docker:18.06.3-ce
     commands:
-      - export DOCKER_HOST=tcp://docker:2375
-      - apk add --no-cache py-pip && pip install docker-compose
+      - apk add --no-cache py-pip curl bash && pip install docker-compose
       - docker-compose up -d
-      - yes | ./demo.sh
+      - yes | bash demo.sh
+    volumes:
+      - name: dockersock
+        path: /var/run
   - name: docker_build
     image: plugins/docker
     settings:
@@ -20,3 +22,9 @@ services:
   - name: docker
     image: docker:18.06.3-ce-dind
     privileged: true
+    volumes:
+      - name: dockersock
+        path: /var/run
+volumes:
+  - name: dockersock
+    temp: {}
