@@ -24,7 +24,6 @@ services:
     privileged: true
     ports:
     - 8080
-    - 2375
     volumes:
       - name: dockersock
         path: /var/run
