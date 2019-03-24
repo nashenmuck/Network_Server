@@ -17,7 +17,7 @@ steps:
       password:
         from_secret: docker_password
       repo: nashenmuck/network
-      tag: develops
+      tag: testing
 services:
   - name: docker
     image: docker:18.06.3-ce-dind
