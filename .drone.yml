@@ -4,7 +4,7 @@ steps:
   - name: docker_test
     image: docker:18.06.3-ce
     commands:
-      - apk add --no-cache py-pip curl bash && pip install docker-compose
+      - apk add --no-cache py-pip curl bash gcc libffi-dev openssl-dev python2-dev musl-dev make && pip install docker-compose
       - docker-compose up -d
       - yes | bash demo.sh http://docker:8080
     volumes:
