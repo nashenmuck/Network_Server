@@ -28,7 +28,9 @@ function nc(){
     curl -q -H "Auth-Token: ${tokens[$i]}" \
         "$@"\
         $URL/$r
-    exit $?
+    if [ $? != 0 ]; then
+	    exit $?
+    fi
 }
 function ncj(){
     a=$1
