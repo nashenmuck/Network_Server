@@ -2,7 +2,7 @@ kind: pipeline
 name: default
 steps:
   - name: docker_test
-    image: docker:18.09.4
+    image: docker:19.03.8
     commands:
       - apk add --no-cache py-pip curl bash gcc libffi-dev openssl-dev python2-dev musl-dev make && pip install docker-compose
       - docker-compose up -d
@@ -20,7 +20,7 @@ steps:
       tag: testing
 services:
   - name: docker
-    image: docker:18.09.4-dind
+    image: docker:19.03.8-dind
     privileged: true
     ports:
     - 8080
